@@ -1,0 +1,50 @@
+[
+  {
+    "Id": 1,
+    "Username": "Jason",
+    "Password": "sfa",
+    "Balance": 7.5
+  },
+  {
+    "Id": 2,
+    "Username": "David",
+    "Password": "upmc",
+    "Balance": 1.25
+  },
+  {
+    "Id": 3,
+    "Username": "Glen",
+    "Password": "hitech",
+    "Balance": 12.75
+  },
+  {
+    "Id": 4,
+    "Username": "Rod",
+    "Password": "optx",
+    "Balance": 38.5
+  },
+  {
+    "Id": 5,
+    "Username": "Joel",
+    "Password": "tarheels",
+    "Balance": 100.0
+  },
+  {
+    "Id": 6,
+    "Username": "Roxanne",
+    "Password": "sting",
+    "Balance": 27.50
+  },
+  {
+    "Id": 7,
+    "Username": "Kris",
+    "Password": "iem",
+    "Balance": 5.00
+  },
+  {
+    "Id": 8,
+    "Username": "Dilip",
+    "Password": "testing",
+    "Balance": 12.75
+  }
+]
