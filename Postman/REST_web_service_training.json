@@ -1,0 +1,467 @@
+{
+	"variables": [],
+	"info": {
+		"name": "WebAPI Test Suite",
+		"_postman_id": "e1cd005e-6aa8-0cdc-11a3-2ea92e55da7d",
+		"description": "Tests for the web api exercises",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"description": "",
+			"item": [
+				{
+					"name": "Get Products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var jsonData = JSON.parse(responseBody);\nif(jsonData !== null) {\n    tests[\"Test all products returned\"] = jsonData.length === 9;\n    var hasStock = true;\n    jsonData.forEach(function setHasStock(p) {\n        if(hasStock) {\n            hasStock = p.Quantity > 0;\n        }\n    });\n    \n    tests[\"Test all products returned have stock\"] = hasStock === true;\n    \n} else {\n    tests[\"Test all products returned\"] = false;\n    tests[\"Test all products returned have stock\"] = false;\n}\n\n"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/products",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product with no stock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/products",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Name\": \"Nerds\",\n    \"Price\": 3.50,\n    \"Quantity\": 0\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get New Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\nvar jsonData = JSON.parse(responseBody);\n\nif(jsonData !== null) {\n     tests[\"Test new product exists\"] = jsonData.Name === \"Nerds\";\n} else {\n    tests[\"Test new product exists\"] = false;\n}"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/products/10",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Product has no stock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var jsonData = JSON.parse(responseBody);\nif(jsonData !== null) {\n    tests[\"Test all products returned\"] = jsonData.length === 1;\n    \n    var hasNoStock = true;\n    jsonData.forEach(function setHasStock(p) {\n        if(hasNoStock) {\n            hasNoStock = p.Quantity === 0;\n        }\n    });\n    \n    tests[\"Test all products returned have no stock\"] = hasNoStock === true;\n\n} else {\n    tests[\"Test all products returned\"] = false;\n    tests[\"Test all products returned have no stock\"] = false;\n}"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/products?hasStock=false",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "update product to have stock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 204\"] = responseCode.code === 204;"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/products/10",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Id\": 10,\n\t\"Name\": \"Nerds\",\n    \"Price\": 3.50,\n    \"Quantity\": 55\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Product Has Stock after update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var jsonData = JSON.parse(responseBody);\nif(jsonData !== null) {\n    tests[\"Test all products returned\"] = jsonData.length === 10;\n    var hasStock = true;\n    jsonData.forEach(function setHasStock(p) {\n        if(hasStock) {\n            hasStock = p.Quantity > 0;\n        }\n    });\n    \n    tests[\"Test all products returned have stock\"] = hasStock === true;\n    \n} else {\n    tests[\"Test all products returned\"] = false;\n    tests[\"Test all products returned have stock\"] = false;\n}\n\n"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/products?hasStock=true",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete New Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 204\"] = responseCode.code === 204;"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/products/10",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Products after delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var jsonData = JSON.parse(responseBody);\nif(jsonData !== null) {\n    tests[\"Test all products returned\"] = jsonData.length === 9;\n    var hasStock = true;\n    jsonData.forEach(function setHasStock(p) {\n        if(hasStock) {\n            hasStock = p.Quantity > 0;\n        }\n    });\n    \n    tests[\"Test all products returned have stock\"] = hasStock === true;\n    \n} else {\n    tests[\"Test all products returned\"] = false;\n    tests[\"Test all products returned have stock\"] = false;\n}\n\n"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/products",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"description": "",
+			"item": [
+				{
+					"name": "Get Transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nif(postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8') {\n    var jsonData = JSON.parse(responseBody);\n    if(jsonData !== null) {\n        tests[\"Test all transactions returned\"] = jsonData.length === 2000;\n        \n    } else {\n        tests[\"Test all transactions returned\"] = false;\n    }\n} else {\n    tests[\"Test failed response not json\"] = false;\n}\n"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/transactions",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transactions with dateRange",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nif(postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8') {\n    var jsonData = JSON.parse(responseBody);\n    if(jsonData !== null) {\n        tests[\"Test all transactions returned\"] = jsonData.length === 686;\n        \n    } else {\n        tests[\"Test all transactions returned\"] = false;\n    }\n} else {\n    tests[\"Test failed response not json\"] = false;\n}\n"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/transactions?startDate=2016-02-02&endDate=2016-12-12",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"description": "",
+			"item": [
+				{
+					"name": "Get Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nif(postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8') {\n    var jsonData = JSON.parse(responseBody);\n    if(jsonData !== null) {\n        tests[\"Test all users returned\"] = jsonData.length === 8;\n        \n    } else {\n        tests[\"Test all users returned\"] = false;\n    }\n} else {\n    tests[\"Test failed response not json\"] = false;\n}\n"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/users",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create User with no balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Name\": \"Nerds\",\n    \"Price\": 3.50,\n    \"Quantity\": 0\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get New User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nif(postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8') {\n    var jsonData = JSON.parse(responseBody);\n    \n    if(jsonData !== null) {\n         tests[\"Test new user exists\"] = jsonData.Username === \"Bryan\";\n    } else {\n        tests[\"Test new user exists\"] = false;\n    }\n} else {\n    tests[\"Test failed response not json\"] = false;\n}"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/users/9",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get ordered users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "\ntests[\"Status code is 200\"] = responseCode.code === 200;\n\nif(postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8') {\n    var jsonData = JSON.parse(responseBody);\n    if(jsonData !== null) {\n        tests[\"New User has lowest balance\"] = jsonData[0].Username === \"Bryan\";\n        \n    } else {\n        tests[\"New User has lowest balance\"] = false;\n    }\n} else {\n    tests[\"Test failed response not json\"] = false;\n}\n"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/users?sortBalance=ASC",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "update user to have balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 204\"] = responseCode.code === 204;"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/users/9",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Id\": 9,\n\t\"Username\": \"Bryan\",\n    \"Password\": \"360\",\n    \"Balance\": 9001\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "User has highest balance after update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "\ntests[\"Status code is 200\"] = responseCode.code === 200;\n\nif(postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8') {\n    var jsonData = JSON.parse(responseBody);\n    if(jsonData !== null) {\n        tests[\"New User has highest balance\"] = jsonData[0].Username === \"Bryan\";\n        \n    } else {\n        tests[\"New User has highest balance\"] = false;\n    }\n} else {\n    tests[\"Test failed response not json\"] = false;\n}\n\n"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/users?sortBalance=DESC",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete New User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 204\"] = responseCode.code === 204;"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/users/9",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users after delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "\ntests[\"Status code is 200\"] = responseCode.code === 200;\n\nif(postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8') {\n\n    var jsonData = JSON.parse(responseBody);\n    if(jsonData !== null) {\n        tests[\"Test all users returned\"] = jsonData.length === 8;\n        \n    } else {\n        tests[\"Test all users returned\"] = false;\n    }\n} else {\n    tests[\"Test failed response not json\"] = false;\n}\n"
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:57270/users",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
