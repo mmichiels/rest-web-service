@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Http;
 using System.Web.Routing;
 
@@ -25,8 +26,10 @@ namespace TuscService.Controllers
         [Route("products")]
         public IEnumerable<Product> GetProductsWithStock(bool hasStock)
         {
-            // TODO
-            return null;
+            if (hasStock)
+                return DataManager.GetProducts().Where(p => p.Quantity > 0);
+
+            return DataManager.GetProducts().Where((p => p.Quantity < 1));
         }
 
         // GET api/products/5
@@ -62,5 +65,6 @@ namespace TuscService.Controllers
         {
             DataManager.DeleteProduct(id);
         }
+
     }
 }
